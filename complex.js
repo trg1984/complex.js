@@ -64,6 +64,10 @@ Math.Complex.prototype.isReal = function() { return ( this.precision(Math.Comple
 
 Math.Complex.prototype.conjugate = function() { return ( new Math.Complex(this.x, -this.y) ); }
 
+Math.Complex.prototype.neg = function() { return ( new Math.Complex(-this.x, -this.y) ); }
+
+Math.Complex.prototype.inv = function() { return ( (new Math.Complex(1, 0)).div(this) ); }
+
 Math.Complex.prototype.add = function(a) { return ( new Math.Complex(this.x + a.x, this.y + a.y) ); }
 
 Math.Complex.prototype.sub = function(a) { return ( new Math.Complex(this.x - a.x, this.y - a.y) ); }
