@@ -1,0 +1,62 @@
+<html>
+<head>
+<title>Complex.js example page</title>
+<script src="complex.js"></script>
+<script>
+	function process() {
+		var result = eval(document.querySelector('textarea.main').value);
+		var stdOut = document.querySelector('.stdout');
+		stdOut.innerHTML += '<span class="stdIn">' + document.querySelector('textarea.main').value + '</span><span class="result">' + result + '</span><br/>';
+	}
+	
+	function clearStdOut() {
+		var stdOut = document.querySelector('.stdout');
+		stdOut.innerHTML = '';
+	}
+</script>
+<style>
+	html, body {
+		padding: 0;
+		margin: 0;
+		background-color: white;
+	}
+	
+	textarea.main {
+		width: calc(100% - 16px);
+		height: 15em;
+		margin: 8px;
+		resize: vertical;
+	}
+	
+	input[type="button"] {
+		margin: 0 0 0 8px;
+	}
+	
+	.stdOut {
+		background-color: rgba(0, 0, 0, 0.05);
+		margin: 8px;
+		width: calc(100% - 24px);
+		padding: 4px;
+		line-height: 1.34em;
+	}
+	
+	.stdIn {
+		margin-top: 10px;
+		margin-right: 10px;
+		font-weight: bold;
+		display: inline-block;
+		white-space: pre-line;
+	}
+	
+	.stdIn:after {
+		content: ' : ';
+	}
+</style>
+</head>
+<body>
+<textarea class="main"></textarea><br/>
+<input type="button" onclick="process()" value="Process" />
+<input type="button" onclick="clearStdOut()" value="Clear" />
+<div class="stdout"></div>
+</body>
+</html>
