@@ -451,8 +451,26 @@ Math.Complex.prototype.arcsec = function() {
 	);
 }
 
-/* incomplete
 Math.Complex.prototype.gamma = function() {
+	
+	//     \Gamma(1-z) * \Gamma(z) = {\pi \over \sin \pi z}
+	// <=> \Gamma(z) = \frac{\pi}{\sin \pi z \Gamma(1-z) }
+	
+	if (this.Re() < 0.5) return (
+		Math.Complex.div(
+			Math.PI,
+			Math.Complex.sin(this.mul(Math.PI))
+			.mul(
+				Math.Complex.gamma(
+					Math.Complex.sub(1, this)
+				)
+			)
+		)
+	);
+	
+	// else
+	
+	var g = 7;
 	var p = [
 		676.5203681218851,
 		-1259.1392167224028,
@@ -464,22 +482,36 @@ Math.Complex.prototype.gamma = function() {
 		1.5056327351493116e-7
 	];
 
-	var z0 = new Math.Complex(this);
-
-	if (z0.Re() < 0.5) return Math.PI / (Math.Complex.sin(z0.mul(Math.PI)) * Math.Complex.gamma(1 - z0));
-	else {
-		
-		z0.x -= 1;
-		var x = 0.99999999999980993;
-		
-		for (i in p) {
-			x = Math.Complex.add(x, Math.Complex.div(p[i], z0.add(i + 1)));
+	//A_g(z) = \frac{1}{2}p_0(g) + p_1(g) \frac{z}{z+1} + p_2(g) \frac{z(z-1)}{(z+1)(z+2)} + \cdots. 
+	var __Ag = function(zVal) {
+		var result = new Math.Complex(0.99999999999980993);
+		for (var k = 0; k < p.length; ++k) {
+			result = result.add( Math.Complex.div( p[k], zVal.add(k + 1) ) );
 		}
-		t = z0.add(p.length - 0.5);
-		return t.pow(z0 + 0.5).mul(Math.sqrt(2 * Math.PI)).mul(Math.Complex.pow(Math.E, -t)).mul(x);
+		
+		return result;
 	}
+
+	//\Gamma(z) = \sqrt{2\pi} {\left( z + g - \frac{1}{2} \right)}^{z - \frac{1}{2} } e^{-\left(z+g-\frac{1}{2}\right)} A_g(z - 1)
+	
+	//gamma(z) =
+	var ans = Math.Complex.pow(
+			2 * Math.PI,
+			1 / 2
+		).mul(
+			Math.Complex.pow(
+				this.add(g).sub(1 / 2),
+				this.sub(1 / 2)
+			)
+		).mul(
+			Math.Complex.pow(
+				Math.E,
+				Math.Complex.neg(this.add(g).sub(1 / 2))
+			)
+		).mul( __Ag(this.sub(1)) );
+		return ( this.isReal() && (this.x > 0) && (this.x === (Math.round(this.x))) ? new Math.Complex(Math.round(ans.x)) : ans );
 }
-*/
+
 Math.Complex.prototype.pow = function(power) {
     
     var r = this.modulus();
@@ -492,7 +524,7 @@ Math.Complex.prototype.pow = function(power) {
 		(new Math.Complex(
 			scalar * Math.cos(inner),
 			scalar * Math.sin(inner)
-		)).precision(Math.Complex.prototype.mepsExp)
+		))
 	);
 }
 
@@ -689,12 +721,12 @@ Math.Complex.ln = function(a, k) {
 	var temp = a instanceof Math.Complex ? a : new Math.Complex(a);
 	return temp.ln(k)
 }
-/* incomplete
+
 Math.Complex.gamma = function(a) {
 	var temp = a instanceof Math.Complex ? a : new Math.Complex(a);
 	return temp.gamma()
 }
-*/
+
 Math.Complex.pow = function(a, exponent) {
 	var temp = a instanceof Math.Complex ? a : new Math.Complex(a);
 	return temp.pow(exponent)
