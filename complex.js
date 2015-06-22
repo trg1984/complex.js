@@ -167,23 +167,46 @@ Math.Complex.prototype.cos = function() {
 }
 
 Math.Complex.prototype.tan = function() {
-	// (e^(2iz)-1)/(i(e^(2iz)+1)),
 	return (
 		Math.Complex.div(
-			Math.Complex.sub(
-				Math.Complex.pow(
-					Math.E,
-					this.mul(Math.Complex.I.mul(2))
-				),
-				1
-			),
-			Math.Complex.add(
-				Math.Complex.pow(
-					Math.E,
-					this.mul(Math.Complex.I.mul(2))
-				),
-				1
-			)
+			this.sin(),
+			this.cos()
+		)
+	);
+}
+
+Math.Complex.prototype.cot = function() {
+	return (
+		Math.Complex.div(
+			this.cos(),
+			this.sin()
+		)
+	);
+}
+
+Math.Complex.prototype.sec = function() {
+	return (
+		Math.Complex.div(
+			1,
+			this.cos()
+		)
+	);
+}
+
+Math.Complex.prototype.csc = function() {
+	return (
+		Math.Complex.div(
+			1,
+			this.sin()
+		)
+	);
+}
+
+Math.Complex.prototype.zhukovskii = function() {
+	return (
+		Math.Complex.mul(
+			1/2,
+			this.add(this.inv())
 		)
 	);
 }
@@ -244,6 +267,90 @@ Math.Complex.prototype.cosh = function() {
 				Math.Complex.pow(Math.E, this.neg())
 			),
 			2
+		)
+	);
+}
+
+Math.Complex.prototype.arcsinh = function() {
+	return (
+		Math.Complex.ln(
+			this.add(
+				Math.Complex.pow(
+					this.mul(this).add(1),
+					1 / 2
+				)
+			)
+		)
+	);
+}
+
+Math.Complex.prototype.arccosh = function() {
+	return (
+		Math.Complex.ln(
+			this
+				.add(Math.Complex.pow(this.add(1), 1 / 2))
+				.add(Math.Complex.pow(this.sub(1), 1 / 2))
+		)
+	);
+}
+
+Math.Complex.prototype.arctanh = function() {
+	return (
+		Math.Complex.mul(
+			1 / 2,
+			Math.Complex.sub(
+				Math.Complex.ln(Math.Complex.add(1, this)),
+				Math.Complex.ln(Math.Complex.sub(1, this))
+			)
+		)
+	);
+}
+
+Math.Complex.prototype.arccoth = function() {
+	return (
+		Math.Complex.mul(
+			1 / 2,
+			Math.Complex.sub(
+				Math.Complex.ln(Math.Complex.add(1, this.inv())),
+				Math.Complex.ln(Math.Complex.sub(1, this.inv()))
+			)
+		)
+	);
+}
+
+Math.Complex.prototype.arccsch = function() {
+	// ln(sqrt(1+1/(z^2)) + 1/z)
+	return (
+		Math.Complex.ln(
+			Math.Complex.pow(
+				Math.Complex.add(
+					1,
+					Math.Complex.div(1, this.mul(this))
+				),
+				1/2
+			)
+			.add(this.inv())
+		)
+	);
+}
+
+
+Math.Complex.prototype.arcsech = function() {
+	// ln(1/z+sqrt(1/z-1)*sqrt(1/z+1))
+	return (
+		Math.Complex.ln(
+			this.inv().add(
+				Math.Complex.mul(
+					Math.Complex.pow(
+						this.inv().sub(1),
+						1/2
+					),
+					Math.Complex.pow(
+						this.inv().add(1),
+						1/2
+					)
+				)
+			)
 		)
 	);
 }
@@ -321,7 +428,7 @@ Math.Complex.prototype.arccsc = function() {
 					),
 					Math.Complex.I.div(this)
 				)
-			);
+			)
 		)
 	);
 }
@@ -339,7 +446,7 @@ Math.Complex.prototype.arcsec = function() {
 					),
 					Math.Complex.I.div(this)
 				)
-			);
+			)
 		)
 	);
 }
@@ -473,6 +580,21 @@ Math.Complex.tan = function(a) {
 	return temp.tan()
 }
 
+Math.Complex.cot = function(a) {
+	var temp = a instanceof Math.Complex ? a : new Math.Complex(a);
+	return temp.cot()
+}
+
+Math.Complex.sec = function(a) {
+	var temp = a instanceof Math.Complex ? a : new Math.Complex(a);
+	return temp.sec()
+}
+
+Math.Complex.csc = function(a) {
+	var temp = a instanceof Math.Complex ? a : new Math.Complex(a);
+	return temp.csc()
+}
+
 Math.Complex.arcsin = function(a) {
 	var temp = a instanceof Math.Complex ? a : new Math.Complex(a);
 	return temp.arcsin()
@@ -531,6 +653,36 @@ Math.Complex.sech = function(a) {
 Math.Complex.csch = function(a) {
 	var temp = a instanceof Math.Complex ? a : new Math.Complex(a);
 	return temp.csch()
+}
+
+Math.Complex.arcsinh = function(a) {
+	var temp = a instanceof Math.Complex ? a : new Math.Complex(a);
+	return temp.arcsinh()
+}
+
+Math.Complex.arccosh = function(a) {
+	var temp = a instanceof Math.Complex ? a : new Math.Complex(a);
+	return temp.arccosh()
+}
+
+Math.Complex.arctanh = function(a) {
+	var temp = a instanceof Math.Complex ? a : new Math.Complex(a);
+	return temp.arctanh()
+}
+
+Math.Complex.arccoth = function(a) {
+	var temp = a instanceof Math.Complex ? a : new Math.Complex(a);
+	return temp.arccoth()
+}
+
+Math.Complex.arccsch = function(a) {
+	var temp = a instanceof Math.Complex ? a : new Math.Complex(a);
+	return temp.arccsch()
+}
+
+Math.Complex.arcsech = function(a) {
+	var temp = a instanceof Math.Complex ? a : new Math.Complex(a);
+	return temp.arcsech()
 }
 
 Math.Complex.ln = function(a, k) {
